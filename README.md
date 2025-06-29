@@ -1,5 +1,5 @@
 # BarterChain MVP  
-[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovic/barterchain-mvp)](https://barterchain.vercel.app)
+[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovics-projects/barterchain-mvp)](https://barterchain-mvp.vercel.app)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 [![GitHub Stars](https://img.shields.io/github/stars/omerbakalovic/barterchain-mvp?style=social)](https://github.com/omerbakalovic/barterchain-mvp)
 
