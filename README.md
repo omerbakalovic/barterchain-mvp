@@ -1,4 +1,7 @@
 # BarterChain MVP
+[![Vercel](https://vercelbadge.vercel.app/api/<user>/<project>)](https://barterchain.vercel.app)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+[![GitHub Stars](https://img.shields.io/github/stars/<user>/barterchain-mvp?style=social)](https://github.com/<user>/barterchain-mvp)
 
 > “Give what you don’t use → Get what you truly want.”
 
