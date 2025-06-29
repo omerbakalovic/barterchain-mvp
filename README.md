@@ -1,7 +1,7 @@
 # BarterChain MVP  
-[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovic/barterchain-mvp)](https://barterchain.vercel.app)
+[![Vercel](https://vercelbadge.vercel.app/api/obakalovic/barterchain-mvp)](https://barterchain.vercel.app)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-[![GitHub Stars](https://img.shields.io/github/stars/omerbakalovic/barterchain-mvp?style=social)](https://github.com/omerbakalovic/barterchain-mvp)
+[![GitHub Stars](https://img.shields.io/github/stars/obakalovic/barterchain-mvp?style=social)](https://github.com/obakalovic/barterchain-mvp)
 
 > “Give what you don’t use → Get what you truly want.”
 
