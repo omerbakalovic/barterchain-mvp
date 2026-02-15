@@ -1,5 +1,5 @@
 # BarterChain MVP  
-[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovics-projects/barterchain-mvp)](https://barterchain-mvp.vercel.app)
+[![Vercel](https://img.shields.io/website?url=https%3A%2F%2Fbarterchain-mvp.vercel.app&label=Vercel&up_message=Live&down_message=Down)](https://barterchain-mvp.vercel.app)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 [![GitHub Stars](https://img.shields.io/github/stars/omerbakalovic/barterchain-mvp?style=social)](https://github.com/omerbakalovic/barterchain-mvp)
 
@@ -20,3 +20,14 @@ git clone https://github.com/<username>/barterchain-mvp.git
 cd barterchain-mvp
 pnpm install        # ili npm / yarn
 pnpm dev            # lokalno <http://localhost:3000>
+```
+
+## Next Steps
+1. Install dependencies and run the app locally:
+   ```bash
+   pnpm install
+   pnpm dev
+   ```
+2. Open `http://localhost:3000` and confirm the landing page loads.
+3. Commit and push your changes when you are ready to deploy.
+

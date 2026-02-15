@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
+import Link from "next/link";
 
 export default function Landing() {
   // jednostavna varijabla za fade-in animaciju
@@ -42,9 +43,12 @@ export default function Landing() {
           BarterChain AI instantly builds multi-hop swap chains so every item
           finds its next happy owner—no cash, no waste.
         </motion.p>
-        <motion.div variants={fade} initial="hidden" animate="show" custom={2}>
+        <motion.div variants={fade} initial="hidden" animate="show" custom={2} className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Button size="lg" className="px-8 py-6 text-xl">
             Join the Beta
+          </Button>
+          <Button asChild size="lg" variant="outline" className="px-8 py-6 text-xl">
+            <Link href="/local">Try Local Demo</Link>
           </Button>
         </motion.div>
       </section>
