@@ -1,46 +1,102 @@
-# BarterChain MVP  
--[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovics-projects/barterchain-mvp)](https://barterchain-mvp.vercel.app)
-+[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovic/barterchain-mvp)](https://barterchain-mvp.vercel.app)
- ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
- [![GitHub Stars](https://img.shields.io/github/stars/omerbakalovic/barterchain-mvp?style=social)](https://github.com/omerbakalovic/barterchain-mvp)
- 
- > “Give what you don’t use → Get what you truly want.”
- 
- BarterChain AI je eksperimentalna platforma koja zatvara **multi-hop barter lance** uz pomoć graf-algoritma i minimalnog AI-a za parsiranje oglasa.  
- Ovaj repozitorij sadrži **Next.js PWA** za landing-stranicu i, uskoro, *FastAPI* servis za traženje ciklusa.
- 
- ## Road-map (v0.1)
- 1. 🎨  **Landing page** – statički PWA + e-mail capture  
- 2. 🔗  **/api/match** – Python endpoint s simple_cycles (≤6 hop)  
- 3. 📦  **Escrow & shipping stub** – Stripe test-mode + DHL sandbox  
- 4. 🌱  **Demo data seed** – skripta koja uvozi anonimizirane oglase  
- 
- ## Quick Start
- ```bash
- git clone https://github.com/<username>/barterchain-mvp.git
- cd barterchain-mvp
- pnpm install        # ili npm / yarn
- pnpm dev            # lokalno <http://localhost:3000>
-+```
+﻿# BarterChain MVP
 
-[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovics-projects/barterchain-mvp)](https://barterchain-mvp.vercel.app)
+[![Vercel](https://vercelbadge.vercel.app/api/omerbakalovic/barterchain-mvp)](https://barterchain-mvp.vercel.app)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 [![GitHub Stars](https://img.shields.io/github/stars/omerbakalovic/barterchain-mvp?style=social)](https://github.com/omerbakalovic/barterchain-mvp)
 
-> “Give what you don’t use → Get what you truly want.”
+> Give what you do not use. Get what you actually want.
 
-BarterChain AI je eksperimentalna platforma koja zatvara **multi-hop barter lance** uz pomoć graf-algoritma i minimalnog AI-a za parsiranje oglasa.  
-Ovaj repozitorij sadrži **Next.js PWA** za landing-stranicu i, uskoro, *FastAPI* servis za traženje ciklusa.
+BarterChain is an experimental platform for building multi-hop barter loops.
+Instead of waiting for one perfect direct swap, the product aims to connect several
+people into a single trade chain where each person receives something useful.
 
-## Road-map (v0.1)
-1. 🎨  **Landing page** – statički PWA + e-mail capture  
-2. 🔗  **/api/match** – Python endpoint s simple_cycles (≤6 hop)  
-3. 📦  **Escrow & shipping stub** – Stripe test-mode + DHL sandbox  
-4. 🌱  **Demo data seed** – skripta koja uvozi anonimizirane oglase  
+The current repository contains a Next.js MVP with:
+
+- a product landing page
+- a real listing creation flow
+- a scored barter-chain search using `have / want`
+- a chain proposal and acceptance flow for real trade coordination
+- a beta waitlist form
+- Supabase-backed persistence when env vars are present
+- local JSON fallback storage for development
+- basic PWA metadata through `manifest.ts`
+- an internal signals dashboard at `/admin/signals`
 
 ## Quick Start
+
 ```bash
-git clone https://github.com/<username>/barterchain-mvp.git
+git clone https://github.com/omerbakalovic/barterchain-mvp.git
 cd barterchain-mvp
-pnpm install        # ili npm / yarn
-pnpm dev            # lokalno <http://localhost:3000>
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+If that port is already in use, Next.js will pick the next available one.
+
+## Environment
+
+Create `.env.local` from `.env.example` if you want Supabase persistence:
+
+```bash
+SUPABASE_URL=...
+SUPABASE_SERVICE_ROLE_KEY=...
+MATCH_API_ENGINE=legacy
+ADMIN_SIGNALS_ACCESS_KEY=...
+```
+
+Expected tables:
+
+```sql
+create table waitlist_entries (
+  id bigint generated always as identity primary key,
+  email text not null,
+  use_case text not null default '',
+  created_at timestamptz not null
+);
+
+create table listings (
+  id text primary key,
+  title text not null,
+  description text not null,
+  category text not null,
+  value_estimate numeric not null,
+  city text not null,
+  trust_score numeric not null,
+  gives text not null,
+  wants text[] not null,
+  created_at timestamptz not null
+);
+```
+
+Without Supabase env vars, waitlist entries are stored in `data/waitlist.json` and listings are stored in `data/listings.json`.
+`MATCH_API_ENGINE` is optional and keeps `/api/match` on the legacy matcher unless you set it to `graph`.
+The internal dashboard reads waitlist data plus logged match requests from `data/match-requests.json`.
+In local development, `/admin/signals` is open. In production, access it with `/admin/signals?key=...`
+after setting `ADMIN_SIGNALS_ACCESS_KEY`.
+
+## Commands
+
+```bash
+npm run dev
+npm run lint
+npm run build
+npm run test
+```
+
+## Current MVP Notes
+
+- `app/page.tsx` contains the landing experience, listing form, and chain lab.
+- `app/api/listings/route.ts` validates and stores barter listings.
+- `app/api/match/route.ts` exposes ranked barter chains and includes stored listings when available.
+- `app/api/chain-proposals/route.ts` stores chain proposals and blocks overlapping active listings.
+- `app/api/waitlist/route.ts` validates and stores waitlist submissions.
+- `lib/listing-store.ts` handles Supabase or local listing persistence.
+- `lib/chain-proposal-store.ts` persists proposal lifecycle state separately from matching.
+- `lib/match-request-store.ts` logs match exploration requests locally for signal analysis.
+
+## License
+
+MIT
+
+
