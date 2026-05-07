@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ADMIN_SIGNALS_ACCESS_KEY_ENV, canAccessAdminSignals } from "@/lib/admin-access";
+import { resolveMatchEngineMode } from "@/lib/match-api";
 import {
   getMarketplaceSignals,
   type BarterCluster,
@@ -148,7 +150,23 @@ function ClusterList({ clusters }: { clusters: BarterCluster[] }) {
   );
 }
 
-function MismatchTable({ signals }: { signals: MarketplaceSignals["mismatches"] }) {
+function buildMismatchHref(have: string, want: string, accessKey: string) {
+  const params = new URLSearchParams();
+  params.set("have", have);
+  params.set("want", want);
+  if (accessKey) {
+    params.set("key", accessKey);
+  }
+  return `/admin/signals/mismatch?${params.toString()}`;
+}
+
+function MismatchTable({
+  signals,
+  accessKey,
+}: {
+  signals: MarketplaceSignals["mismatches"];
+  accessKey: string;
+}) {
   if (signals.length === 0) {
     return <p className="text-sm leading-6 text-slate-500">No mismatch pairs yet.</p>;
   }
@@ -161,14 +179,23 @@ function MismatchTable({ signals }: { signals: MarketplaceSignals["mismatches"] 
             <th className="px-4 py-3 font-medium">Have</th>
             <th className="px-4 py-3 font-medium">Want</th>
             <th className="px-4 py-3 font-medium">Count</th>
+            <th className="px-4 py-3 font-medium" />
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100 bg-white">
           {signals.map((signal) => (
-            <tr key={signal.label}>
+            <tr key={signal.label} className="hover:bg-amber-50/50">
               <td className="px-4 py-3 font-medium text-slate-900">{signal.have}</td>
               <td className="px-4 py-3 text-slate-600">{signal.want}</td>
               <td className="px-4 py-3 text-slate-600">{signal.count}</td>
+              <td className="px-4 py-3 text-right">
+                <Link
+                  href={buildMismatchHref(signal.have, signal.want, accessKey)}
+                  className="text-sm font-semibold text-amber-800 hover:text-amber-900"
+                >
+                  View requests →
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -200,6 +227,18 @@ export default async function AdminSignalsPage({
     trust,
     source,
   });
+
+  const activeEngine = resolveMatchEngineMode(new URLSearchParams());
+
+  const exportParams = new URLSearchParams();
+  if (accessKey) exportParams.set("key", accessKey);
+  if (item) exportParams.set("item", item);
+  if (city) exportParams.set("city", city);
+  if (trust) exportParams.set("trust", trust);
+  if (source !== "all") exportParams.set("source", source);
+  const exportHref = exportParams.toString()
+    ? `/api/admin/signals/export?${exportParams.toString()}`
+    : "/api/admin/signals/export";
 
   const summaryCards = [
     {
@@ -239,8 +278,16 @@ export default async function AdminSignalsPage({
               This page stays internal. In production it requires the `{ADMIN_SIGNALS_ACCESS_KEY_ENV}` query key.
             </p>
           </div>
-          <div className="rounded-2xl border border-amber-200 bg-white/80 px-4 py-3 text-sm text-slate-600">
-            Filters update server-side from current waitlist entries and logged match requests.
+          <div className="flex flex-col gap-2 rounded-2xl border border-amber-200 bg-white/80 px-4 py-3 text-sm text-slate-600">
+            <span>
+              Active match engine:{" "}
+              <span className="font-semibold uppercase tracking-wide text-slate-900">
+                {activeEngine}
+              </span>
+            </span>
+            <span className="text-xs text-slate-500">
+              Filters update server-side from current waitlist entries and logged match requests.
+            </span>
           </div>
         </div>
 
@@ -306,7 +353,7 @@ export default async function AdminSignalsPage({
                   <option value="waitlist">Waitlist only</option>
                 </select>
               </label>
-              <div className="flex items-end gap-3">
+              <div className="flex flex-wrap items-end gap-3">
                 <button
                   type="submit"
                   className="h-11 rounded-full bg-slate-950 px-5 text-sm font-semibold text-white hover:bg-slate-800"
@@ -318,6 +365,12 @@ export default async function AdminSignalsPage({
                   className="h-11 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700"
                 >
                   Reset
+                </a>
+                <a
+                  href={exportHref}
+                  className="h-11 rounded-full border border-amber-300 bg-amber-50 px-5 py-3 text-sm font-semibold text-amber-900 hover:bg-amber-100"
+                >
+                  Download JSON
                 </a>
               </div>
             </form>
@@ -395,7 +448,7 @@ export default async function AdminSignalsPage({
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0">
-              <MismatchTable signals={signals.mismatches} />
+              <MismatchTable signals={signals.mismatches} accessKey={accessKey} />
             </CardContent>
           </Card>
 

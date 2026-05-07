@@ -70,7 +70,7 @@ const trustBuckets = [
   { value: "unknown", label: "Unknown" },
 ] as const;
 
-function normalizeLabel(value: string) {
+export function normalizeLabel(value: string) {
   return value.trim().toLowerCase().replace(/\s+/g, " ");
 }
 
