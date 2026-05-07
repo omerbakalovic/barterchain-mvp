@@ -9,11 +9,14 @@ export type WaitlistEntry = {
   source: "supabase" | "local";
 };
 
-const waitlistFilePath = path.join(process.cwd(), "data", "waitlist.json");
+function getWaitlistFilePath(env: NodeJS.ProcessEnv = process.env) {
+  const dataRoot = env.BARTERCHAIN_DATA_DIR || path.join(process.cwd(), "data");
+  return path.join(dataRoot, "waitlist.json");
+}
 
-function getSupabaseClient() {
-  const url = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+function getSupabaseClient(env: NodeJS.ProcessEnv = process.env) {
+  const url = env.SUPABASE_URL;
+  const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {
     return null;
@@ -27,36 +30,41 @@ function getSupabaseClient() {
   });
 }
 
-async function saveToLocalFile(entry: WaitlistEntry) {
-  await fs.mkdir(path.dirname(waitlistFilePath), { recursive: true });
+async function saveToLocalFile(entry: WaitlistEntry, env: NodeJS.ProcessEnv = process.env) {
+  const filePath = getWaitlistFilePath(env);
+
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
 
   const existingEntries: WaitlistEntry[] = await fs
-    .readFile(waitlistFilePath, "utf8")
+    .readFile(filePath, "utf8")
     .then((content) => JSON.parse(content) as WaitlistEntry[])
     .catch(() => [] as WaitlistEntry[]);
 
   existingEntries.push(entry);
-  await fs.writeFile(waitlistFilePath, JSON.stringify(existingEntries, null, 2), "utf8");
+  await fs.writeFile(filePath, JSON.stringify(existingEntries, null, 2), "utf8");
 }
 
-async function readFromLocalFile() {
+async function readFromLocalFile(env: NodeJS.ProcessEnv = process.env) {
   return fs
-    .readFile(waitlistFilePath, "utf8")
+    .readFile(getWaitlistFilePath(env), "utf8")
     .then((content) => JSON.parse(content) as WaitlistEntry[])
     .catch(() => [] as WaitlistEntry[]);
 }
 
-export async function saveWaitlistEntry(input: {
-  email: string;
-  useCase: string;
-}): Promise<WaitlistEntry> {
+export async function saveWaitlistEntry(
+  input: {
+    email: string;
+    useCase: string;
+  },
+  env: NodeJS.ProcessEnv = process.env
+): Promise<WaitlistEntry> {
   const baseEntry = {
     email: input.email,
     useCase: input.useCase,
     createdAt: new Date().toISOString(),
   };
 
-  const supabase = getSupabaseClient();
+  const supabase = getSupabaseClient(env);
 
   if (supabase) {
     const { error } = await supabase.from("waitlist_entries").insert({
@@ -75,12 +83,14 @@ export async function saveWaitlistEntry(input: {
     source: "local",
   };
 
-  await saveToLocalFile(localEntry);
+  await saveToLocalFile(localEntry, env);
   return localEntry;
 }
 
-export async function readWaitlistEntries(): Promise<WaitlistEntry[]> {
-  const supabase = getSupabaseClient();
+export async function readWaitlistEntries(
+  env: NodeJS.ProcessEnv = process.env
+): Promise<WaitlistEntry[]> {
+  const supabase = getSupabaseClient(env);
 
   if (supabase) {
     const { data, error } = await supabase
@@ -98,5 +108,5 @@ export async function readWaitlistEntries(): Promise<WaitlistEntry[]> {
     }
   }
 
-  return readFromLocalFile();
+  return readFromLocalFile(env);
 }
