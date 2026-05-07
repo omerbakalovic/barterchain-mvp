@@ -1,0 +1,166 @@
+{
+  "name": "trust-pressure-market",
+  "description": "High-value media listings participate in overlapping cycles where local convenience conflicts with trust and fairness.",
+  "testing": [
+    "Dense overlapping cycles around a single anchor listing",
+    "Competing chains that share the same high-value listing",
+    "Trust-score conflicts and value imbalance penalties"
+  ],
+  "market": {
+    "description": "Marketplace-wide selection should expose whether graph-native scoring prefers the longer but healthier cycle set.",
+    "maxHops": 6,
+    "expectations": [
+      "Graph should consider replacing a short local loop with a longer higher-trust loop when it improves whole-market coverage.",
+      "Legacy-compatible request comparisons may remain close even when marketplace-wide selection diverges."
+    ]
+  },
+  "listings": [
+    {
+      "id": "alia-camera",
+      "trader": "Alia",
+      "city": "Berlin",
+      "gives": "mirrorless camera",
+      "wants": ["commuter bike", "audio mixer"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 220,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "boris-bike",
+      "trader": "Boris",
+      "city": "Berlin",
+      "gives": "commuter bike",
+      "wants": ["espresso machine"],
+      "category": "Mobility",
+      "categorySlug": "mobility",
+      "condition": "good",
+      "estimatedValue": 160,
+      "shipping": "local-only",
+      "trustScore": 3.1
+    },
+    {
+      "id": "cleo-espresso",
+      "trader": "Cleo",
+      "city": "Berlin",
+      "gives": "espresso machine",
+      "wants": ["mirrorless camera"],
+      "category": "Kitchen",
+      "categorySlug": "kitchen",
+      "condition": "good",
+      "estimatedValue": 70,
+      "shipping": "domestic",
+      "trustScore": 3.4
+    },
+    {
+      "id": "dario-mixer",
+      "trader": "Dario",
+      "city": "Hamburg",
+      "gives": "audio mixer",
+      "wants": ["floor lamp"],
+      "category": "Music",
+      "categorySlug": "music",
+      "condition": "excellent",
+      "estimatedValue": 210,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "esme-lamp",
+      "trader": "Esme",
+      "city": "Leipzig",
+      "gives": "floor lamp",
+      "wants": ["acoustic panels"],
+      "category": "Home",
+      "categorySlug": "home",
+      "condition": "excellent",
+      "estimatedValue": 205,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "farah-panels",
+      "trader": "Farah",
+      "city": "Munich",
+      "gives": "acoustic panels",
+      "wants": ["mirrorless camera"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 215,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "gavin-projector",
+      "trader": "Gavin",
+      "city": "Cologne",
+      "gives": "projector",
+      "wants": ["standing desk"],
+      "category": "Office",
+      "categorySlug": "office",
+      "condition": "excellent",
+      "estimatedValue": 180,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "hana-desk",
+      "trader": "Hana",
+      "city": "Cologne",
+      "gives": "standing desk",
+      "wants": ["podcast microphone"],
+      "category": "Home office",
+      "categorySlug": "home-office",
+      "condition": "good",
+      "estimatedValue": 175,
+      "shipping": "local-only",
+      "trustScore": 4.5
+    },
+    {
+      "id": "ines-mic",
+      "trader": "Ines",
+      "city": "Cologne",
+      "gives": "podcast microphone",
+      "wants": ["projector"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "excellent",
+      "estimatedValue": 185,
+      "shipping": "domestic",
+      "trustScore": 4.7
+    },
+    {
+      "id": "joel-drone",
+      "trader": "Joel",
+      "city": "Stuttgart",
+      "gives": "camera drone",
+      "wants": ["projector"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "good",
+      "estimatedValue": 240,
+      "shipping": "domestic",
+      "trustScore": 4.3
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "camera-listing",
+      "description": "Single-listing comparison from the shared anchor item. This checks whether request-scoped compare mode still looks close even when global selection changes.",
+      "kind": "listing",
+      "listingId": "alia-camera",
+      "maxHops": 6
+    },
+    {
+      "name": "camera-for-bike",
+      "description": "Trade-request view for a realistic buyer who only cares about one return item, not total marketplace coverage.",
+      "kind": "trade-request",
+      "have": "mirrorless camera",
+      "want": "commuter bike",
+      "maxHops": 6
+    }
+  ]
+}

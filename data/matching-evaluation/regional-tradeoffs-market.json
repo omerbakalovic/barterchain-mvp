@@ -1,0 +1,153 @@
+{
+  "name": "regional-tradeoffs-market",
+  "description": "Regional marketplace where compact local loops compete with longer fair-value chains that cross several cities.",
+  "testing": [
+    "City mismatch and proximity tradeoffs",
+    "Value balance versus shorter local convenience",
+    "Cases where graph should not be assumed strictly better on every metric"
+  ],
+  "market": {
+    "description": "Use this fixture to see whether graph gains coverage by accepting regional hops and whether that tradeoff hurts fairness or chain quality.",
+    "maxHops": 6,
+    "expectations": [
+      "Graph may improve coverage by selecting a longer regional chain.",
+      "Legacy may still look better when local proximity dominates user value."
+    ]
+  },
+  "listings": [
+    {
+      "id": "karin-tablet",
+      "trader": "Karin",
+      "city": "Berlin",
+      "gives": "tablet",
+      "wants": ["office chair", "camping stove"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "good",
+      "estimatedValue": 180,
+      "shipping": "domestic",
+      "trustScore": 4.2
+    },
+    {
+      "id": "lars-chair",
+      "trader": "Lars",
+      "city": "Berlin",
+      "gives": "office chair",
+      "wants": ["turntable"],
+      "category": "Home office",
+      "categorySlug": "home-office",
+      "condition": "good",
+      "estimatedValue": 95,
+      "shipping": "local-only",
+      "trustScore": 3.5
+    },
+    {
+      "id": "mina-turntable",
+      "trader": "Mina",
+      "city": "Berlin",
+      "gives": "turntable",
+      "wants": ["tablet"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "good",
+      "estimatedValue": 205,
+      "shipping": "domestic",
+      "trustScore": 3.9
+    },
+    {
+      "id": "nico-stove",
+      "trader": "Nico",
+      "city": "Dresden",
+      "gives": "camping stove",
+      "wants": ["mirrorless lens"],
+      "category": "Outdoor",
+      "categorySlug": "outdoor",
+      "condition": "excellent",
+      "estimatedValue": 170,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "olga-lens",
+      "trader": "Olga",
+      "city": "Leipzig",
+      "gives": "mirrorless lens",
+      "wants": ["bike trainer"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 175,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "pavel-trainer",
+      "trader": "Pavel",
+      "city": "Hamburg",
+      "gives": "bike trainer",
+      "wants": ["tablet"],
+      "category": "Fitness",
+      "categorySlug": "fitness",
+      "condition": "excellent",
+      "estimatedValue": 185,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "quincy-speaker",
+      "trader": "Quincy",
+      "city": "Berlin",
+      "gives": "bluetooth speaker",
+      "wants": ["reading lamp"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "good",
+      "estimatedValue": 85,
+      "shipping": "domestic",
+      "trustScore": 4.4
+    },
+    {
+      "id": "rhea-lamp",
+      "trader": "Rhea",
+      "city": "Berlin",
+      "gives": "reading lamp",
+      "wants": ["e-reader"],
+      "category": "Home",
+      "categorySlug": "home",
+      "condition": "excellent",
+      "estimatedValue": 70,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "soren-reader",
+      "trader": "Soren",
+      "city": "Berlin",
+      "gives": "e-reader",
+      "wants": ["bluetooth speaker"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "excellent",
+      "estimatedValue": 95,
+      "shipping": "domestic",
+      "trustScore": 4.5
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "tablet-listing",
+      "description": "Tablet owner compares a short in-city loop with a cleaner but more distributed regional route.",
+      "kind": "listing",
+      "listingId": "karin-tablet",
+      "maxHops": 6
+    },
+    {
+      "name": "tablet-for-chair",
+      "description": "Trade-request parity check for users who care about the office-chair outcome more than network-wide optimization.",
+      "kind": "trade-request",
+      "have": "tablet",
+      "want": "office chair",
+      "maxHops": 6
+    }
+  ]
+}

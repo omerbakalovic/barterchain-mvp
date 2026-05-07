@@ -1,0 +1,127 @@
+{
+  "name": "sparse-mixed-market",
+  "description": "Sparse tech-and-home market with one solid local swap, one longer fallback loop, and several low-probability branches.",
+  "testing": [
+    "Sparse connectivity with one useful longer chain",
+    "Dead ends mixed into otherwise viable inventory",
+    "Another near-parity control for rollout confidence"
+  ],
+  "market": {
+    "description": "This fixture sits between the compact baseline and the harsher sparse dead-end market.",
+    "maxHops": 6,
+    "expectations": [
+      "Both engines should find the same basic opportunities.",
+      "Large graph wins here would need explanation."
+    ]
+  },
+  "listings": [
+    {
+      "id": "quinn-printer",
+      "trader": "Quinn",
+      "city": "Munich",
+      "gives": "printer",
+      "wants": ["router", "tablet"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "good",
+      "estimatedValue": 95,
+      "shipping": "domestic",
+      "trustScore": 4.1
+    },
+    {
+      "id": "rhea-router",
+      "trader": "Rhea",
+      "city": "Munich",
+      "gives": "router",
+      "wants": ["desk", "printer"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "excellent",
+      "estimatedValue": 80,
+      "shipping": "domestic",
+      "trustScore": 4.5
+    },
+    {
+      "id": "sven-desk",
+      "trader": "Sven",
+      "city": "Munich",
+      "gives": "desk",
+      "wants": ["printer"],
+      "category": "Home office",
+      "categorySlug": "home-office",
+      "condition": "fair",
+      "estimatedValue": 120,
+      "shipping": "local-only",
+      "trustScore": 3.9
+    },
+    {
+      "id": "tala-tablet",
+      "trader": "Tala",
+      "city": "Augsburg",
+      "gives": "tablet",
+      "wants": ["coffee grinder"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "good",
+      "estimatedValue": 150,
+      "shipping": "domestic",
+      "trustScore": 4.2
+    },
+    {
+      "id": "uma-grinder",
+      "trader": "Uma",
+      "city": "Augsburg",
+      "gives": "coffee grinder",
+      "wants": ["desk"],
+      "category": "Kitchen",
+      "categorySlug": "kitchen",
+      "condition": "excellent",
+      "estimatedValue": 65,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "viktor-watch",
+      "trader": "Viktor",
+      "city": "Munich",
+      "gives": "smart watch",
+      "wants": ["printer"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "excellent",
+      "estimatedValue": 140,
+      "shipping": "domestic",
+      "trustScore": 4.4
+    },
+    {
+      "id": "wendy-coat",
+      "trader": "Wendy",
+      "city": "Nuremberg",
+      "gives": "winter coat",
+      "wants": ["smart watch"],
+      "category": "Fashion",
+      "categorySlug": "fashion",
+      "condition": "good",
+      "estimatedValue": 90,
+      "shipping": "domestic",
+      "trustScore": 4.0
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "printer-listing",
+      "description": "Listing-focused view in a sparse market where only one longer loop saves the search from a dead end.",
+      "kind": "listing",
+      "listingId": "quinn-printer",
+      "maxHops": 6
+    },
+    {
+      "name": "printer-for-desk",
+      "description": "Trade-request parity check for the obvious desk return target.",
+      "kind": "trade-request",
+      "have": "printer",
+      "want": "desk",
+      "maxHops": 6
+    }
+  ]
+}

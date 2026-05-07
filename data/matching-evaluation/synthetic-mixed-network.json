@@ -1,0 +1,231 @@
+{
+  "name": "synthetic-mixed-network",
+  "description": "Larger synthetic marketplace with three cycle clusters, one overlapping anchor listing, and a few low-signal distractions.",
+  "testing": [
+    "Larger synthetic network with mixed-quality matches",
+    "Multiple disjoint chains competing for one shared high-value listing",
+    "Coverage and quality tradeoffs at a size closer to a small real marketplace"
+  ],
+  "market": {
+    "description": "This is the main fixture for deciding whether graph-native whole-market selection is materially better than the legacy baseline.",
+    "maxHops": 6,
+    "expectations": [
+      "Graph should earn its case by covering more listings without collapsing trust or fairness.",
+      "If graph does not beat legacy here, the default switch should wait."
+    ]
+  },
+  "listings": [
+    {
+      "id": "anya-camera",
+      "trader": "Anya",
+      "city": "Berlin",
+      "gives": "compact camera",
+      "wants": ["cargo bike", "dj controller"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 230,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "bram-bike",
+      "trader": "Bram",
+      "city": "Berlin",
+      "gives": "cargo bike",
+      "wants": ["espresso maker"],
+      "category": "Mobility",
+      "categorySlug": "mobility",
+      "condition": "fair",
+      "estimatedValue": 260,
+      "shipping": "local-only",
+      "trustScore": 3.2
+    },
+    {
+      "id": "celine-espresso",
+      "trader": "Celine",
+      "city": "Berlin",
+      "gives": "espresso maker",
+      "wants": ["compact camera"],
+      "category": "Kitchen",
+      "categorySlug": "kitchen",
+      "condition": "good",
+      "estimatedValue": 80,
+      "shipping": "domestic",
+      "trustScore": 3.5
+    },
+    {
+      "id": "diego-controller",
+      "trader": "Diego",
+      "city": "Cologne",
+      "gives": "dj controller",
+      "wants": ["drafting tablet"],
+      "category": "Music",
+      "categorySlug": "music",
+      "condition": "excellent",
+      "estimatedValue": 220,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "elin-tablet",
+      "trader": "Elin",
+      "city": "Hamburg",
+      "gives": "drafting tablet",
+      "wants": ["studio lights"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 225,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "farid-lights",
+      "trader": "Farid",
+      "city": "Leipzig",
+      "gives": "studio lights",
+      "wants": ["compact camera"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 215,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "gita-projector",
+      "trader": "Gita",
+      "city": "Cologne",
+      "gives": "projector",
+      "wants": ["gaming chair"],
+      "category": "Office",
+      "categorySlug": "office",
+      "condition": "excellent",
+      "estimatedValue": 180,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "hugo-chair",
+      "trader": "Hugo",
+      "city": "Cologne",
+      "gives": "gaming chair",
+      "wants": ["vinyl crate"],
+      "category": "Gaming",
+      "categorySlug": "gaming",
+      "condition": "good",
+      "estimatedValue": 170,
+      "shipping": "local-only",
+      "trustScore": 4.4
+    },
+    {
+      "id": "ines-vinyl",
+      "trader": "Ines",
+      "city": "Cologne",
+      "gives": "vinyl crate",
+      "wants": ["projector"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "good",
+      "estimatedValue": 175,
+      "shipping": "domestic",
+      "trustScore": 4.5
+    },
+    {
+      "id": "jasper-lens",
+      "trader": "Jasper",
+      "city": "Frankfurt",
+      "gives": "portrait lens",
+      "wants": ["hiking pack"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 190,
+      "shipping": "domestic",
+      "trustScore": 4.7
+    },
+    {
+      "id": "klara-pack",
+      "trader": "Klara",
+      "city": "Frankfurt",
+      "gives": "hiking pack",
+      "wants": ["fountain pen"],
+      "category": "Outdoor",
+      "categorySlug": "outdoor",
+      "condition": "excellent",
+      "estimatedValue": 150,
+      "shipping": "domestic",
+      "trustScore": 4.3
+    },
+    {
+      "id": "lev-pen",
+      "trader": "Lev",
+      "city": "Frankfurt",
+      "gives": "fountain pen",
+      "wants": ["camera flash"],
+      "category": "Collectibles",
+      "categorySlug": "collectibles",
+      "condition": "good",
+      "estimatedValue": 145,
+      "shipping": "domestic",
+      "trustScore": 4.4
+    },
+    {
+      "id": "marta-flash",
+      "trader": "Marta",
+      "city": "Frankfurt",
+      "gives": "camera flash",
+      "wants": ["portrait lens"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 160,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "noel-watch",
+      "trader": "Noel",
+      "city": "Stuttgart",
+      "gives": "running watch",
+      "wants": ["projector"],
+      "category": "Fitness",
+      "categorySlug": "fitness",
+      "condition": "good",
+      "estimatedValue": 140,
+      "shipping": "domestic",
+      "trustScore": 4.2
+    },
+    {
+      "id": "orla-rug",
+      "trader": "Orla",
+      "city": "Dortmund",
+      "gives": "woven rug",
+      "wants": ["compact camera"],
+      "category": "Home",
+      "categorySlug": "home",
+      "condition": "good",
+      "estimatedValue": 120,
+      "shipping": "domestic",
+      "trustScore": 4.1
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "camera-listing",
+      "description": "Listing-centric view from the shared anchor listing in the largest synthetic network.",
+      "kind": "listing",
+      "listingId": "anya-camera",
+      "maxHops": 6
+    },
+    {
+      "name": "camera-for-bike",
+      "description": "Trade-request parity view for the obvious local return item even though a marketplace-wide selector may prefer a different use of the anchor listing.",
+      "kind": "trade-request",
+      "have": "compact camera",
+      "want": "cargo bike",
+      "maxHops": 6
+    }
+  ]
+}

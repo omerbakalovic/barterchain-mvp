@@ -1,0 +1,140 @@
+{
+  "name": "sparse-dead-ends-market",
+  "description": "Sparse household-goods market with many realistic dead ends, one recoverable long loop, and limited overlap.",
+  "testing": [
+    "Sparse graphs with dead ends",
+    "Longer recoverable chain among mostly non-viable listings",
+    "Baseline scenario where graph and legacy may legitimately tie"
+  ],
+  "market": {
+    "description": "This fixture is useful for verifying that graph mode does not invent gains when the market is mostly disconnected.",
+    "maxHops": 6,
+    "expectations": [
+      "Both engines should converge on the same few viable loops.",
+      "Diagnostic output should clearly show the absence of a meaningful graph advantage."
+    ]
+  },
+  "listings": [
+    {
+      "id": "tessa-printer",
+      "trader": "Tessa",
+      "city": "Munich",
+      "gives": "laser printer",
+      "wants": ["router", "monitor arm"],
+      "category": "Office",
+      "categorySlug": "office",
+      "condition": "good",
+      "estimatedValue": 110,
+      "shipping": "domestic",
+      "trustScore": 4.1
+    },
+    {
+      "id": "ulrich-router",
+      "trader": "Ulrich",
+      "city": "Munich",
+      "gives": "wifi router",
+      "wants": ["filing cabinet"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "excellent",
+      "estimatedValue": 85,
+      "shipping": "domestic",
+      "trustScore": 4.5
+    },
+    {
+      "id": "violet-cabinet",
+      "trader": "Violet",
+      "city": "Munich",
+      "gives": "filing cabinet",
+      "wants": ["monitor arm"],
+      "category": "Home office",
+      "categorySlug": "home-office",
+      "condition": "fair",
+      "estimatedValue": 130,
+      "shipping": "local-only",
+      "trustScore": 3.9
+    },
+    {
+      "id": "wade-arm",
+      "trader": "Wade",
+      "city": "Augsburg",
+      "gives": "monitor arm",
+      "wants": ["laser printer"],
+      "category": "Office",
+      "categorySlug": "office",
+      "condition": "good",
+      "estimatedValue": 75,
+      "shipping": "domestic",
+      "trustScore": 4.4
+    },
+    {
+      "id": "xena-heater",
+      "trader": "Xena",
+      "city": "Regensburg",
+      "gives": "space heater",
+      "wants": ["wifi router"],
+      "category": "Home",
+      "categorySlug": "home",
+      "condition": "good",
+      "estimatedValue": 60,
+      "shipping": "domestic",
+      "trustScore": 4.0
+    },
+    {
+      "id": "yuri-tripod",
+      "trader": "Yuri",
+      "city": "Nuremberg",
+      "gives": "camera tripod",
+      "wants": ["bluetooth keyboard"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 90,
+      "shipping": "domestic",
+      "trustScore": 4.7
+    },
+    {
+      "id": "zara-keyboard",
+      "trader": "Zara",
+      "city": "Nuremberg",
+      "gives": "bluetooth keyboard",
+      "wants": ["coffee grinder"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "excellent",
+      "estimatedValue": 70,
+      "shipping": "domestic",
+      "trustScore": 4.3
+    },
+    {
+      "id": "aron-grinder",
+      "trader": "Aron",
+      "city": "Wurzburg",
+      "gives": "coffee grinder",
+      "wants": ["desk fan"],
+      "category": "Kitchen",
+      "categorySlug": "kitchen",
+      "condition": "excellent",
+      "estimatedValue": 55,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "printer-listing",
+      "description": "Sparse listing-focused search with one viable long loop and several tempting dead ends.",
+      "kind": "listing",
+      "listingId": "tessa-printer",
+      "maxHops": 6
+    },
+    {
+      "name": "printer-for-monitor-arm",
+      "description": "Trade request that should remain mostly parity because the graph itself is barely connected.",
+      "kind": "trade-request",
+      "have": "laser printer",
+      "want": "monitor arm",
+      "maxHops": 6
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "name": "balanced-city-market",
+  "description": "Dense small-city market with several plausible three-way swaps and one longer fallback route.",
+  "testing": [
+    "Healthy baseline with strong local overlap",
+    "Mostly parity case for legacy and graph",
+    "Regression guard for simple dense markets"
+  ],
+  "market": {
+    "description": "A control fixture where both engines should usually agree because the market is compact and cleanly connected.",
+    "maxHops": 6,
+    "expectations": [
+      "Graph should not regress on the easy local baseline.",
+      "Large graph advantages here would be suspicious."
+    ]
+  },
+  "listings": [
+    {
+      "id": "anna-camera",
+      "trader": "Anna",
+      "city": "Berlin",
+      "gives": "camera",
+      "wants": ["synth", "monitor"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 180,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "ben-synth",
+      "trader": "Ben",
+      "city": "Berlin",
+      "gives": "synth",
+      "wants": ["bike", "camera"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "good",
+      "estimatedValue": 170,
+      "shipping": "domestic",
+      "trustScore": 4.5
+    },
+    {
+      "id": "clara-bike",
+      "trader": "Clara",
+      "city": "Berlin",
+      "gives": "bike",
+      "wants": ["camera", "lamp"],
+      "category": "Mobility",
+      "categorySlug": "mobility",
+      "condition": "good",
+      "estimatedValue": 190,
+      "shipping": "local-only",
+      "trustScore": 4.7
+    },
+    {
+      "id": "david-lamp",
+      "trader": "David",
+      "city": "Berlin",
+      "gives": "lamp",
+      "wants": ["tablet", "camera"],
+      "category": "Home",
+      "categorySlug": "home",
+      "condition": "excellent",
+      "estimatedValue": 55,
+      "shipping": "domestic",
+      "trustScore": 4.2
+    },
+    {
+      "id": "eva-tablet",
+      "trader": "Eva",
+      "city": "Berlin",
+      "gives": "tablet",
+      "wants": ["monitor", "lamp"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "good",
+      "estimatedValue": 210,
+      "shipping": "domestic",
+      "trustScore": 4.4
+    },
+    {
+      "id": "felix-monitor",
+      "trader": "Felix",
+      "city": "Potsdam",
+      "gives": "monitor",
+      "wants": ["camera", "tablet"],
+      "category": "Tech",
+      "categorySlug": "tech",
+      "condition": "excellent",
+      "estimatedValue": 160,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "greta-books",
+      "trader": "Greta",
+      "city": "Leipzig",
+      "gives": "book set",
+      "wants": ["lamp"],
+      "category": "Leisure",
+      "categorySlug": "leisure",
+      "condition": "good",
+      "estimatedValue": 35,
+      "shipping": "domestic",
+      "trustScore": 4.1
+    },
+    {
+      "id": "henry-speaker",
+      "trader": "Henry",
+      "city": "Berlin",
+      "gives": "speaker",
+      "wants": ["book set", "monitor"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "good",
+      "estimatedValue": 90,
+      "shipping": "domestic",
+      "trustScore": 4.3
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "camera-listing",
+      "description": "Baseline listing query in a compact city market with several clean loops.",
+      "kind": "listing",
+      "listingId": "anna-camera",
+      "maxHops": 6
+    },
+    {
+      "name": "camera-for-bike",
+      "description": "Direct trade-request baseline where both engines should return essentially the same top path.",
+      "kind": "trade-request",
+      "have": "camera",
+      "want": "bike",
+      "maxHops": 6
+    }
+  ]
+}

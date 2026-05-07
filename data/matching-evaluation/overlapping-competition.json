@@ -1,0 +1,140 @@
+{
+  "name": "overlapping-competition",
+  "description": "Music and gaming listings create multiple overlapping cycles that compete for the same premium items.",
+  "testing": [
+    "Dense overlapping cycles",
+    "Competing chains sharing the same high-value listings",
+    "Selection pressure when only one anchor chain can survive"
+  ],
+  "market": {
+    "description": "This fixture is a smaller whole-market selection stress case centered on a premium guitar listing.",
+    "maxHops": 6,
+    "expectations": [
+      "Graph should at least match legacy on candidate discovery.",
+      "Selection differences should be explicit when overlapping high-value chains compete."
+    ]
+  },
+  "listings": [
+    {
+      "id": "iris-guitar",
+      "trader": "Iris",
+      "city": "Hamburg",
+      "gives": "guitar",
+      "wants": ["drum machine", "camera lens"],
+      "category": "Music",
+      "categorySlug": "music",
+      "condition": "excellent",
+      "estimatedValue": 220,
+      "shipping": "domestic",
+      "trustScore": 4.9
+    },
+    {
+      "id": "jules-drum",
+      "trader": "Jules",
+      "city": "Hamburg",
+      "gives": "drum machine",
+      "wants": ["camera lens", "guitar"],
+      "category": "Music",
+      "categorySlug": "music",
+      "condition": "good",
+      "estimatedValue": 210,
+      "shipping": "domestic",
+      "trustScore": 4.7
+    },
+    {
+      "id": "kira-lens",
+      "trader": "Kira",
+      "city": "Hamburg",
+      "gives": "camera lens",
+      "wants": ["guitar", "vinyl player"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "excellent",
+      "estimatedValue": 230,
+      "shipping": "domestic",
+      "trustScore": 4.8
+    },
+    {
+      "id": "liam-vinyl",
+      "trader": "Liam",
+      "city": "Cologne",
+      "gives": "vinyl player",
+      "wants": ["camera lens", "game console"],
+      "category": "Audio",
+      "categorySlug": "audio",
+      "condition": "good",
+      "estimatedValue": 200,
+      "shipping": "domestic",
+      "trustScore": 4.3
+    },
+    {
+      "id": "maya-console",
+      "trader": "Maya",
+      "city": "Cologne",
+      "gives": "game console",
+      "wants": ["guitar", "vinyl player"],
+      "category": "Gaming",
+      "categorySlug": "gaming",
+      "condition": "excellent",
+      "estimatedValue": 240,
+      "shipping": "domestic",
+      "trustScore": 4.4
+    },
+    {
+      "id": "nora-mic",
+      "trader": "Nora",
+      "city": "Hamburg",
+      "gives": "studio mic",
+      "wants": ["drum machine"],
+      "category": "Music",
+      "categorySlug": "music",
+      "condition": "excellent",
+      "estimatedValue": 110,
+      "shipping": "domestic",
+      "trustScore": 4.6
+    },
+    {
+      "id": "owen-chair",
+      "trader": "Owen",
+      "city": "Bremen",
+      "gives": "desk chair",
+      "wants": ["studio mic"],
+      "category": "Home office",
+      "categorySlug": "home-office",
+      "condition": "good",
+      "estimatedValue": 85,
+      "shipping": "domestic",
+      "trustScore": 4.1
+    },
+    {
+      "id": "pia-light",
+      "trader": "Pia",
+      "city": "Bremen",
+      "gives": "ring light",
+      "wants": ["desk chair", "guitar"],
+      "category": "Creative",
+      "categorySlug": "creative",
+      "condition": "good",
+      "estimatedValue": 70,
+      "shipping": "domestic",
+      "trustScore": 4.2
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "guitar-listing",
+      "description": "Listing query on the premium guitar that multiple chains are trying to consume.",
+      "kind": "listing",
+      "listingId": "iris-guitar",
+      "maxHops": 6
+    },
+    {
+      "name": "guitar-for-camera-lens",
+      "description": "Trade-request view for the obvious local return target in the overlapping market.",
+      "kind": "trade-request",
+      "have": "guitar",
+      "want": "camera lens",
+      "maxHops": 6
+    }
+  ]
+}
