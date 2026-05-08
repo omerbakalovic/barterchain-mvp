@@ -1,4 +1,5 @@
 ﻿import { type BarterListing } from "@/lib/barter-data";
+import { type BufferState } from "@/lib/buffer";
 
 export const MIN_TRUST_SCORE = 1;
 export const MAX_TRUST_SCORE = 5;
@@ -18,6 +19,7 @@ export type StoredListing = ListingInput & {
   id: string;
   createdAt: string;
   source: "supabase" | "local";
+  buffer?: BufferState;
 };
 
 export type ListingValidationResult =

@@ -288,6 +288,12 @@ export default async function AdminSignalsPage({
             <span className="text-xs text-slate-500">
               Filters update server-side from current waitlist entries and logged match requests.
             </span>
+            <Link
+              href={accessKey ? `/admin/buffer?key=${encodeURIComponent(accessKey)}` : "/admin/buffer"}
+              className="text-xs font-semibold text-amber-800 hover:text-amber-900"
+            >
+              View buffer inventory →
+            </Link>
           </div>
         </div>
 

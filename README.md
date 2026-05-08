@@ -88,10 +88,13 @@ npm run test
 
 - `app/page.tsx` contains the landing experience, listing form, and chain lab.
 - `app/api/listings/route.ts` validates and stores barter listings.
-- `app/api/match/route.ts` exposes ranked barter chains and includes stored listings when available.
+- `app/api/listings/[id]/deposit/route.ts` and `.../release/route.ts` drive the trade-buffer lifecycle for stored listings.
+- `app/api/match/route.ts` exposes ranked barter chains and includes stored listings when available; pass `?inventoryOnly=true` to match only against listings currently held in the buffer.
 - `app/api/chain-proposals/route.ts` stores chain proposals and blocks overlapping active listings.
 - `app/api/waitlist/route.ts` validates and stores waitlist submissions.
+- `app/admin/signals` and `app/admin/buffer` provide read-only operator dashboards (gated by `ADMIN_SIGNALS_ACCESS_KEY` in production).
 - `lib/listing-store.ts` handles Supabase or local listing persistence.
+- `lib/buffer.ts` defines the buffer state machine, size-class pricing, and fee calculation (see [docs/buffer-model.md](docs/buffer-model.md)).
 - `lib/chain-proposal-store.ts` persists proposal lifecycle state separately from matching.
 - `lib/match-request-store.ts` logs match exploration requests locally for signal analysis.
 

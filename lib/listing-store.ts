@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { demoListings, type BarterListing } from "@/lib/barter-data";
+import { isInBuffer } from "@/lib/buffer";
 import {
   createListingId,
   toBarterListing,
@@ -134,4 +135,46 @@ export async function readMatcherListings(
   }
 
   return [...demoListings, ...storedListings.map(toBarterListing)];
+}
+
+export async function readInventoryListings(
+  env: NodeJS.ProcessEnv = process.env
+): Promise<BarterListing[]> {
+  const storedListings = await readStoredListings(env);
+  return storedListings
+    .filter((listing) => isInBuffer(listing.buffer))
+    .map(toBarterListing);
+}
+
+export async function findStoredListingById(
+  id: string,
+  env: NodeJS.ProcessEnv = process.env
+): Promise<StoredListing | null> {
+  const listings = await readStoredListings(env);
+  return listings.find((listing) => listing.id === id) ?? null;
+}
+
+async function writeAllListings(
+  listings: StoredListing[],
+  env: NodeJS.ProcessEnv = process.env
+) {
+  const filePath = getListingsFilePath(env);
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(listings, null, 2), "utf8");
+}
+
+export async function updateStoredListing(
+  listing: StoredListing,
+  env: NodeJS.ProcessEnv = process.env
+): Promise<StoredListing | null> {
+  const listings = await readStoredListings(env);
+  const index = listings.findIndex((entry) => entry.id === listing.id);
+
+  if (index === -1) {
+    return null;
+  }
+
+  listings[index] = listing;
+  await writeAllListings(listings, env);
+  return listing;
 }

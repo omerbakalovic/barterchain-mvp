@@ -1,7 +1,7 @@
 ﻿import { NextResponse } from "next/server";
 
 import { demoListings } from "@/lib/barter-data";
-import { readMatcherListings } from "@/lib/listing-store";
+import { readInventoryListings, readMatcherListings } from "@/lib/listing-store";
 import {
   compareListingChains,
   compareTradeRequestChains,
@@ -34,7 +34,13 @@ export async function GET(request: Request) {
   const want = searchParams.get("want");
   const maxHops = normalizeMatchApiMaxHops(searchParams.get("maxHops"));
   const engineMode = resolveMatchEngineMode(searchParams);
-  const listings = await readMatcherListings();
+  const inventoryOnly = searchParams.get("inventoryOnly") === "true";
+  const listings = inventoryOnly
+    ? await readInventoryListings()
+    : await readMatcherListings();
+  const usingStoredListings = inventoryOnly
+    ? listings.length > 0
+    : listings.length > demoListings.length;
 
   if (have && want) {
     await saveMatchRequestEntry({
@@ -59,7 +65,8 @@ export async function GET(request: Request) {
         want,
         maxHops,
         totalListings: listings.length,
-        usingStoredListings: listings.length > demoListings.length,
+        usingStoredListings,
+        inventoryOnly,
         comparison: {
           legacy: toComparePayload(comparison.legacy),
           graph: toComparePayload(comparison.graph),
@@ -82,7 +89,8 @@ export async function GET(request: Request) {
       want,
       maxHops,
       totalListings: listings.length,
-      usingStoredListings: listings.length > demoListings.length,
+      usingStoredListings,
+      inventoryOnly,
       chainCount: chains.length,
       chains,
     });
@@ -92,8 +100,13 @@ export async function GET(request: Request) {
 
   if (!resolvedListingId) {
     return NextResponse.json(
-      { message: "No listings are available." },
-      { status: 500 }
+      {
+        message: inventoryOnly
+          ? "No listings are currently in the buffer."
+          : "No listings are available.",
+        inventoryOnly,
+      },
+      { status: inventoryOnly ? 404 : 500 }
     );
   }
 
@@ -115,7 +128,8 @@ export async function GET(request: Request) {
       listing,
       maxHops,
       totalListings: listings.length,
-      usingStoredListings: listings.length > demoListings.length,
+      usingStoredListings,
+      inventoryOnly,
       comparison: {
         legacy: toComparePayload(comparison.legacy),
         graph: toComparePayload(comparison.graph),
@@ -131,7 +145,8 @@ export async function GET(request: Request) {
     listing,
     maxHops,
     totalListings: listings.length,
-    usingStoredListings: listings.length > demoListings.length,
+    usingStoredListings,
+    inventoryOnly,
     chainCount: chains.length,
     chains,
   });
