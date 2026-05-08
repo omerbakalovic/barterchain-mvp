@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="BarterChain multi-hop cycle matching with trade buffer">
+  <title>BarterChain — multi-hop cycle matching</title>
+  <desc>How direct barter fails, how a 3-cycle finds matches, and how the trade buffer keeps the cycle atomic.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8f5ee"/>
+      <stop offset="1" stop-color="#f1eadc"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#0f172a"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#f59e0b"/>
+    </marker>
+    <style>
+      .label-title { font: 700 18px ui-sans-serif, system-ui, sans-serif; fill: #0f172a; }
+      .label-sub   { font: 500 12px ui-sans-serif, system-ui, sans-serif; fill: #64748b; }
+      .node-name   { font: 700 14px ui-sans-serif, system-ui, sans-serif; fill: #0f172a; }
+      .node-have   { font: 600 11px ui-sans-serif, system-ui, sans-serif; fill: #0f172a; }
+      .node-want   { font: 500 11px ui-sans-serif, system-ui, sans-serif; fill: #b45309; }
+      .panel-title { font: 800 14px ui-sans-serif, system-ui, sans-serif; fill: #0f172a; letter-spacing: 0.08em; text-transform: uppercase; }
+      .body        { font: 400 11px ui-sans-serif, system-ui, sans-serif; fill: #334155; }
+      .footer      { font: 500 11px ui-sans-serif, system-ui, sans-serif; fill: #64748b; }
+    </style>
+  </defs>
+
+  <rect width="960" height="540" fill="url(#bg)"/>
+
+  <!-- Header -->
+  <text x="40" y="50" class="panel-title">BarterChain · multi-hop cycle matching</text>
+  <text x="40" y="72" class="body">Direct barter rarely closes. Cycles unlock matches that pair-wise swaps cannot reach. A trade buffer keeps the cycle atomic.</text>
+
+  <!-- Panel A: direct barter fails -->
+  <g transform="translate(40, 110)">
+    <rect width="270" height="350" rx="20" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="32" class="panel-title">A · pair-wise fails</text>
+    <text x="20" y="52" class="body">Anya wants Bram's bike.</text>
+    <text x="20" y="68" class="body">Bram wants Celine's espresso.</text>
+    <text x="20" y="84" class="body">No direct swap exists.</text>
+
+    <!-- Anya -->
+    <g transform="translate(60, 120)">
+      <circle r="34" fill="#0f172a"/>
+      <text text-anchor="middle" y="-2" class="node-name" fill="#fff8eb">Anya</text>
+      <text text-anchor="middle" y="14" class="node-have" fill="#fef3c7">camera</text>
+    </g>
+    <!-- Bram -->
+    <g transform="translate(195, 120)">
+      <circle r="34" fill="#1e293b"/>
+      <text text-anchor="middle" y="-2" class="node-name" fill="#fff8eb">Bram</text>
+      <text text-anchor="middle" y="14" class="node-have" fill="#fef3c7">bike</text>
+    </g>
+
+    <!-- Anya wants Bram's bike (dashed) -->
+    <path d="M94 120 Q127 96 161 120" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-amber)"/>
+    <text x="127" y="92" text-anchor="middle" class="node-want">wants bike</text>
+
+    <!-- Bram wants espresso (no path target) -->
+    <text x="195" y="180" text-anchor="middle" class="node-want">wants espresso</text>
+    <text x="195" y="196" text-anchor="middle" class="label-sub">…held by Celine</text>
+
+    <text x="20" y="280" class="body">Anya can offer her camera.</text>
+    <text x="20" y="296" class="body">Bram can offer his bike.</text>
+    <text x="20" y="312" class="body">Neither matches the other.</text>
+    <text x="20" y="328" class="body" font-weight="700">Direct trade dead-ends.</text>
+  </g>
+
+  <!-- Panel B: 3-cycle works -->
+  <g transform="translate(345, 110)">
+    <rect width="270" height="350" rx="20" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="32" class="panel-title">B · 3-cycle closes</text>
+    <text x="20" y="52" class="body">Add Celine: she has espresso, wants Anya's camera.</text>
+    <text x="20" y="68" class="body">Each person gets what they want.</text>
+
+    <!-- Triangle of 3 nodes -->
+    <!-- Anya at top -->
+    <g transform="translate(135, 135)">
+      <circle r="32" fill="#0f172a"/>
+      <text text-anchor="middle" y="-3" class="node-name" fill="#fff8eb">Anya</text>
+      <text text-anchor="middle" y="13" class="node-have" fill="#fef3c7">camera</text>
+    </g>
+    <!-- Bram bottom-left -->
+    <g transform="translate(70, 240)">
+      <circle r="32" fill="#1e293b"/>
+      <text text-anchor="middle" y="-3" class="node-name" fill="#fff8eb">Bram</text>
+      <text text-anchor="middle" y="13" class="node-have" fill="#fef3c7">bike</text>
+    </g>
+    <!-- Celine bottom-right -->
+    <g transform="translate(200, 240)">
+      <circle r="32" fill="#334155"/>
+      <text text-anchor="middle" y="-3" class="node-name" fill="#fff8eb">Celine</text>
+      <text text-anchor="middle" y="13" class="node-have" fill="#fef3c7">espresso</text>
+    </g>
+
+    <!-- Cycle arrows: camera→Celine, espresso→Bram, bike→Anya -->
+    <!-- Anya → Celine (camera) -->
+    <path d="M159 158 L181 218" fill="none" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrow-amber)"/>
+    <text x="190" y="190" class="node-want">camera</text>
+    <!-- Celine → Bram (espresso) -->
+    <path d="M168 240 L102 240" fill="none" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrow-amber)"/>
+    <text x="135" y="234" text-anchor="middle" class="node-want">espresso</text>
+    <!-- Bram → Anya (bike) -->
+    <path d="M89 218 L114 158" fill="none" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrow-amber)"/>
+    <text x="78" y="190" text-anchor="end" class="node-want">bike</text>
+
+    <text x="20" y="313" class="body" font-weight="700">3-cycle ≈ 2× more matches than pair-wise.</text>
+    <text x="20" y="329" class="body">Engine searches up to 6 hops.</text>
+  </g>
+
+  <!-- Panel C: buffer keeps it atomic -->
+  <g transform="translate(650, 110)">
+    <rect width="270" height="350" rx="20" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="32" class="panel-title">C · buffer · atomic</text>
+    <text x="20" y="52" class="body">Items deposit first, daily storage fee accrues, ship when cycle closes.</text>
+
+    <!-- Three small nodes feeding into buffer -->
+    <g transform="translate(40, 130)">
+      <circle r="20" fill="#0f172a"/>
+      <text text-anchor="middle" y="4" class="node-name" fill="#fef3c7" font-size="11">Anya</text>
+    </g>
+    <g transform="translate(40, 195)">
+      <circle r="20" fill="#1e293b"/>
+      <text text-anchor="middle" y="4" class="node-name" fill="#fef3c7" font-size="11">Bram</text>
+    </g>
+    <g transform="translate(40, 260)">
+      <circle r="20" fill="#334155"/>
+      <text text-anchor="middle" y="4" class="node-name" fill="#fef3c7" font-size="11">Celine</text>
+    </g>
+
+    <!-- Buffer warehouse -->
+    <g transform="translate(120, 145)">
+      <rect width="120" height="100" rx="14" fill="url(#accent)" stroke="#0f172a"/>
+      <text x="60" y="28" text-anchor="middle" class="node-name" fill="#fff8eb">Buffer</text>
+      <text x="60" y="46" text-anchor="middle" class="body" fill="#fef3c7">camera · bike</text>
+      <text x="60" y="62" text-anchor="middle" class="body" fill="#fef3c7">espresso</text>
+      <text x="60" y="84" text-anchor="middle" class="footer" fill="#fef3c7">€ daily storage</text>
+    </g>
+
+    <!-- Arrows in -->
+    <path d="M62 130 L120 165" fill="none" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M62 195 L120 195" fill="none" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M62 260 L120 225" fill="none" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Engine -->
+    <g transform="translate(180, 270)">
+      <rect x="-50" y="0" width="100" height="32" rx="16" fill="#0f172a"/>
+      <text x="0" y="20" text-anchor="middle" fill="#fef3c7" font-size="11" font-weight="700">engine finds cycle</text>
+    </g>
+    <path d="M180 244 L180 270" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3"/>
+
+    <text x="20" y="335" class="body" font-weight="700">Drop-out risk → 0. Ship instantly.</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="40" y="500" class="footer">Open-source · Next.js + TypeScript · matching engine in lib/matching-engine/ · /api/match dispatches legacy/graph/compare</text>
+  <text x="40" y="518" class="footer">github.com/omerbakalovic/barterchain-mvp</text>
+</svg>

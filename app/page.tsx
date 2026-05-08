@@ -436,6 +436,12 @@ export default function LandingPage() {
 
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(255,241,220,0.9),_transparent_35%),linear-gradient(180deg,_#fffdf8_0%,_#f7f2e8_52%,_#efe5d4_100%)] text-slate-900">
+      <a
+        href="/pitch"
+        className="block bg-slate-950 px-6 py-3 text-center text-sm font-semibold text-amber-100 hover:bg-slate-900 md:px-10"
+      >
+        Read the project pitch — architecture, candidate verticals, and an open invitation to fork →
+      </a>
       <section className="mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-20 pt-8 md:px-10 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: -16 }}

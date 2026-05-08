@@ -10,17 +10,24 @@ BarterChain is an experimental platform for building multi-hop barter loops.
 Instead of waiting for one perfect direct swap, the product aims to connect several
 people into a single trade chain where each person receives something useful.
 
+![BarterChain multi-hop cycle matching with trade buffer](public/cycle-infographic.svg)
+
+> **Read the project pitch:** the architecture, candidate verticals, and an open
+> invitation to fork live at [`/pitch`](https://barterchain-mvp.vercel.app/pitch).
+> A motion-graphics storyboard is in [`docs/pitch-video-storyboard.md`](docs/pitch-video-storyboard.md).
+
 The current repository contains a Next.js MVP with:
 
-- a product landing page
+- a product landing page and an investment-pitch page (`/pitch`) with an animated cycle visualization
 - a real listing creation flow
 - a scored barter-chain search using `have / want`
 - a chain proposal and acceptance flow for real trade coordination
 - a beta waitlist form
+- a trade-buffer module: deposits, releases, daily storage fees, inventory-only matching mode
 - Supabase-backed persistence when env vars are present
 - local JSON fallback storage for development
 - basic PWA metadata through `manifest.ts`
-- an internal signals dashboard at `/admin/signals`
+- internal operator dashboards at `/admin/signals` and `/admin/buffer`
 
 ## Quick Start
 
