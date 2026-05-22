@@ -7,10 +7,10 @@ import {
   type ChainProposal,
   type ChainProposalInput,
 } from "@/lib/chain-proposals";
+import { getDataRoot, writeJsonFileSafe } from "@/lib/data-dir";
 
 function getChainProposalFilePath(env: NodeJS.ProcessEnv = process.env) {
-  const dataRoot = env.BARTERCHAIN_DATA_DIR || path.join(process.cwd(), "data");
-  return path.join(dataRoot, "chain-proposals.json");
+  return path.join(getDataRoot(env), "chain-proposals.json");
 }
 
 async function readFromLocalFile(env: NodeJS.ProcessEnv = process.env) {
@@ -20,11 +20,13 @@ async function readFromLocalFile(env: NodeJS.ProcessEnv = process.env) {
     .catch(() => [] as ChainProposal[]);
 }
 
-async function writeToLocalFile(proposals: ChainProposal[], env: NodeJS.ProcessEnv = process.env) {
+async function writeToLocalFile(
+  proposals: ChainProposal[],
+  env: NodeJS.ProcessEnv = process.env
+): Promise<boolean> {
   const filePath = getChainProposalFilePath(env);
-
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(proposals, null, 2), "utf8");
+  const result = await writeJsonFileSafe(filePath, proposals);
+  return result.persisted;
 }
 
 export async function readChainProposals(

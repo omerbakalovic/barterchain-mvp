@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
+import { getDataRoot, writeJsonFileSafe } from "@/lib/data-dir";
 import type { MatchApiMode } from "@/lib/match-api";
 
 export type MatchRequestEntry = {
@@ -12,8 +13,7 @@ export type MatchRequestEntry = {
 };
 
 function getMatchRequestFilePath(env: NodeJS.ProcessEnv = process.env) {
-  const dataRoot = env.BARTERCHAIN_DATA_DIR || path.join(process.cwd(), "data");
-  return path.join(dataRoot, "match-requests.json");
+  return path.join(getDataRoot(env), "match-requests.json");
 }
 
 function shouldPersistMatchRequests(env: NodeJS.ProcessEnv = process.env) {
@@ -45,11 +45,13 @@ export async function saveMatchRequestEntry(
     createdAt: new Date().toISOString(),
   };
 
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-
   const existingEntries = await readMatchRequestEntries(env);
   existingEntries.push(entry);
-  await fs.writeFile(filePath, JSON.stringify(existingEntries, null, 2), "utf8");
+
+  const result = await writeJsonFileSafe(filePath, existingEntries);
+  if (!result.persisted) {
+    return null;
+  }
 
   return entry;
 }

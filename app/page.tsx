@@ -19,6 +19,8 @@ import {
 import { MatchResultsPanel, type MatchExplorerResponse } from "@/components/match-results-panel";
 import { Button } from "@/components/ui/button";
 import { toChainProposalPayload, type ChainProposal } from "@/lib/chain-proposals";
+import { readJsonResponse } from "@/lib/read-json-response";
+import { parseWantedItems } from "@/lib/listings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type MatchResultChain } from "@/lib/match-results";
 import { buildItemOptions, demoListings } from "@/lib/barter-data";
@@ -179,7 +181,7 @@ export default function LandingPage() {
   async function loadStoredListings() {
     try {
       const response = await fetch("/api/listings");
-      const payload = (await response.json()) as ListingsApiResponse & { message?: string };
+      const payload = await readJsonResponse<ListingsApiResponse & { message?: string }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message || "Could not load listings.");
@@ -201,7 +203,7 @@ export default function LandingPage() {
   async function loadChainProposals() {
     try {
       const response = await fetch("/api/chain-proposals");
-      const payload = (await response.json()) as ChainProposalsApiResponse & { message?: string };
+      const payload = await readJsonResponse<ChainProposalsApiResponse & { message?: string }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message || "Could not load chain proposals.");
@@ -250,7 +252,7 @@ export default function LandingPage() {
         body: JSON.stringify({ email, useCase }),
       });
 
-      const payload = (await response.json()) as { message?: string };
+      const payload = await readJsonResponse<{ message?: string }>(response);
 
       if (!response.ok) {
         throw new Error(payload.message || "Something went wrong.");
@@ -285,15 +287,15 @@ export default function LandingPage() {
           city: listingForm.city,
           trustScore: Number(listingForm.trustScore),
           gives: listingForm.gives,
-          wants: listingForm.wants,
+          wants: parseWantedItems(listingForm.wants),
         }),
       });
 
-      const payload = (await response.json()) as {
+      const payload = await readJsonResponse<{
         message?: string;
         listing?: StoredListing;
         errors?: string[];
-      };
+      }>(response);
 
       if (!response.ok || !payload.listing) {
         throw new Error(payload.errors?.[0] || payload.message || "Could not create listing.");
@@ -330,7 +332,9 @@ export default function LandingPage() {
         engine: mode,
       });
       const response = await fetch(`/api/match?${params.toString()}`);
-      const payload = (await response.json()) as MatchExplorerResponse & { message?: string };
+      const payload = await readJsonResponse<MatchExplorerResponse & { message?: string }>(
+        response
+      );
 
       if (!response.ok) {
         throw new Error(payload.message || "Could not compute barter chains.");
@@ -359,10 +363,10 @@ export default function LandingPage() {
         },
         body: JSON.stringify(toChainProposalPayload(chain)),
       });
-      const payload = (await response.json()) as {
+      const payload = await readJsonResponse<{
         message?: string;
         proposal?: ChainProposal;
-      };
+      }>(response);
 
       if (!response.ok || !payload.proposal) {
         throw new Error(payload.message || "Could not create proposal.");
@@ -403,10 +407,10 @@ export default function LandingPage() {
         },
         body: JSON.stringify({ listingId }),
       });
-      const payload = (await response.json()) as {
+      const payload = await readJsonResponse<{
         message?: string;
         proposal?: ChainProposal;
-      };
+      }>(response);
 
       if (!response.ok || !payload.proposal) {
         throw new Error(payload.message || `Could not ${decision} proposal.`);

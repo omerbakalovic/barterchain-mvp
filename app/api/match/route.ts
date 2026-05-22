@@ -28,6 +28,25 @@ function toComparePayload(engine: MatchComparisonEngineResult) {
 }
 
 export async function GET(request: Request) {
+  try {
+    return await handleMatchRequest(request);
+  } catch (error) {
+    console.error("[match] GET failed", error);
+    return NextResponse.json(
+      {
+        message:
+          error instanceof Error
+            ? error.message
+            : "Could not compute barter chains.",
+        chainCount: 0,
+        chains: [],
+      },
+      { status: 500 }
+    );
+  }
+}
+
+async function handleMatchRequest(request: Request) {
   const { searchParams } = new URL(request.url);
   const listingId = searchParams.get("listingId");
   const have = searchParams.get("have");

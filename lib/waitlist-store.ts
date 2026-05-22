@@ -2,6 +2,8 @@ import { createClient } from "@supabase/supabase-js";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 
+import { getDataRoot, writeJsonFileSafe } from "@/lib/data-dir";
+
 export type WaitlistEntry = {
   email: string;
   useCase: string;
@@ -10,8 +12,7 @@ export type WaitlistEntry = {
 };
 
 function getWaitlistFilePath(env: NodeJS.ProcessEnv = process.env) {
-  const dataRoot = env.BARTERCHAIN_DATA_DIR || path.join(process.cwd(), "data");
-  return path.join(dataRoot, "waitlist.json");
+  return path.join(getDataRoot(env), "waitlist.json");
 }
 
 function getSupabaseClient(env: NodeJS.ProcessEnv = process.env) {
@@ -33,15 +34,13 @@ function getSupabaseClient(env: NodeJS.ProcessEnv = process.env) {
 async function saveToLocalFile(entry: WaitlistEntry, env: NodeJS.ProcessEnv = process.env) {
   const filePath = getWaitlistFilePath(env);
 
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-
   const existingEntries: WaitlistEntry[] = await fs
     .readFile(filePath, "utf8")
     .then((content) => JSON.parse(content) as WaitlistEntry[])
     .catch(() => [] as WaitlistEntry[]);
 
   existingEntries.push(entry);
-  await fs.writeFile(filePath, JSON.stringify(existingEntries, null, 2), "utf8");
+  await writeJsonFileSafe(filePath, existingEntries);
 }
 
 async function readFromLocalFile(env: NodeJS.ProcessEnv = process.env) {

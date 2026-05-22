@@ -3,6 +3,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 
 import { demoListings, type BarterListing } from "@/lib/barter-data";
+import { getDataRoot, writeJsonFileSafe } from "@/lib/data-dir";
 import { isInBuffer } from "@/lib/buffer";
 import {
   createListingId,
@@ -28,8 +29,7 @@ function getSupabaseClient(env: NodeJS.ProcessEnv = process.env) {
 }
 
 function getListingsFilePath(env: NodeJS.ProcessEnv = process.env) {
-  const dataRoot = env.BARTERCHAIN_DATA_DIR || path.join(process.cwd(), "data");
-  return path.join(dataRoot, "listings.json");
+  return path.join(getDataRoot(env), "listings.json");
 }
 
 async function readFromLocalFile(env: NodeJS.ProcessEnv = process.env) {
@@ -39,14 +39,15 @@ async function readFromLocalFile(env: NodeJS.ProcessEnv = process.env) {
     .catch(() => [] as StoredListing[]);
 }
 
-async function saveToLocalFile(entry: StoredListing, env: NodeJS.ProcessEnv = process.env) {
+async function saveToLocalFile(
+  entry: StoredListing,
+  env: NodeJS.ProcessEnv = process.env
+): Promise<boolean> {
   const filePath = getListingsFilePath(env);
-
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-
   const existingEntries = await readFromLocalFile(env);
   existingEntries.push(entry);
-  await fs.writeFile(filePath, JSON.stringify(existingEntries, null, 2), "utf8");
+  const result = await writeJsonFileSafe(filePath, existingEntries);
+  return result.persisted;
 }
 
 export async function saveListing(
@@ -159,8 +160,11 @@ async function writeAllListings(
   env: NodeJS.ProcessEnv = process.env
 ) {
   const filePath = getListingsFilePath(env);
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  await fs.writeFile(filePath, JSON.stringify(listings, null, 2), "utf8");
+  const result = await writeJsonFileSafe(filePath, listings);
+
+  if (!result.persisted) {
+    throw new Error(result.error || "Could not update listings file.");
+  }
 }
 
 export async function updateStoredListing(
