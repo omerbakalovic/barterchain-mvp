@@ -52,6 +52,9 @@ MATCH_API_ENGINE=legacy
 ADMIN_SIGNALS_ACCESS_KEY=...
 ```
 
+For deploying to Vercel with working waitlist + listing forms, follow the
+step-by-step guide in [`docs/supabase-setup.md`](docs/supabase-setup.md).
+
 Expected tables:
 
 ```sql

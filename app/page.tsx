@@ -462,7 +462,7 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="rounded-full border border-amber-200 bg-white/80 px-4 py-2 text-sm text-slate-600 shadow-sm backdrop-blur">
-            Berlin-built, open-source in progress
+            Built in Baden-Württemberg, open-source in progress
           </div>
         </motion.div>
 
@@ -777,7 +777,7 @@ export default function LandingPage() {
                           onChange={(event) =>
                             setListingForm((current) => ({ ...current, city: event.target.value }))
                           }
-                          placeholder="Berlin"
+                          placeholder="Villingen-Schwenningen"
                           className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-base text-slate-900 focus:border-amber-400 focus:outline-none"
                         />
                       </label>
