@@ -46,6 +46,8 @@ test("listings api creates and returns stored listings", async () => {
         trustScore: 4.5,
         gives: "road bike",
         wants: "record player, espresso machine",
+        ownerName: "Lena",
+        ownerContact: "lena@example.com",
       }),
     })
   );

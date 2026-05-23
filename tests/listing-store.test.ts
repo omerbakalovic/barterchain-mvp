@@ -33,6 +33,8 @@ function buildListingInput(overrides: Partial<ListingInput> = {}): ListingInput 
     trustScore: 4.5,
     gives: "vintage telescope",
     wants: ["mountain bike"],
+    ownerName: "Amir",
+    ownerContact: "amir@example.com",
     ...overrides,
   };
 }

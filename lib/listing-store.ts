@@ -73,6 +73,8 @@ export async function saveListing(
       trust_score: baseEntry.trustScore,
       gives: baseEntry.gives,
       wants: baseEntry.wants,
+      owner_name: baseEntry.ownerName,
+      owner_contact: baseEntry.ownerContact,
       created_at: baseEntry.createdAt,
     });
 
@@ -102,7 +104,7 @@ export async function readStoredListings(
     const { data, error } = await supabase
       .from("listings")
       .select(
-        "id, title, description, category, value_estimate, city, trust_score, gives, wants, created_at"
+        "id, title, description, category, value_estimate, city, trust_score, gives, wants, owner_name, owner_contact, created_at"
       )
       .order("created_at", { ascending: false });
 
@@ -117,6 +119,8 @@ export async function readStoredListings(
         trustScore: entry.trust_score,
         gives: entry.gives,
         wants: Array.isArray(entry.wants) ? entry.wants : [],
+        ownerName: entry.owner_name ?? "",
+        ownerContact: entry.owner_contact ?? "",
         createdAt: entry.created_at,
         source: "supabase",
       }));

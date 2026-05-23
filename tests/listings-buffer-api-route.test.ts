@@ -37,6 +37,8 @@ async function createSampleListing() {
         trustScore: 4.5,
         gives: "road bike",
         wants: "record player, espresso machine",
+        ownerName: "Lena",
+        ownerContact: "lena@example.com",
       }),
     })
   );

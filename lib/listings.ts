@@ -13,6 +13,8 @@ export type ListingInput = {
   trustScore: number;
   gives: string;
   wants: string[];
+  ownerName: string;
+  ownerContact: string;
 };
 
 export type StoredListing = ListingInput & {
@@ -64,10 +66,20 @@ export function validateListingInput(payload: Record<string, unknown>): ListingV
   const wants = parseWantedItems(payload.wants as string | string[] | undefined);
   const valueEstimate = Number(payload.valueEstimate);
   const trustScore = Number(payload.trustScore);
+  const ownerName = normalizeWhitespace(`${payload.ownerName ?? ""}`);
+  const ownerContact = normalizeWhitespace(`${payload.ownerContact ?? ""}`);
   const errors: string[] = [];
 
   if (title.length < 3) {
     errors.push("Title must be at least 3 characters.");
+  }
+
+  if (ownerName.length < 2) {
+    errors.push("Your name or handle is required so trade partners know who they are matched with.");
+  }
+
+  if (ownerContact.length < 3) {
+    errors.push("A contact (email or @handle) is required so a chain can be coordinated.");
   }
 
   if (description.length < 10) {
@@ -120,6 +132,8 @@ export function validateListingInput(payload: Record<string, unknown>): ListingV
       trustScore: Number(trustScore.toFixed(1)),
       gives,
       wants,
+      ownerName,
+      ownerContact,
     },
   };
 }
@@ -133,7 +147,7 @@ export function createListingId(input: ListingInput) {
 export function toBarterListing(listing: StoredListing): BarterListing {
   return {
     id: listing.id,
-    trader: listing.title,
+    trader: listing.ownerName || listing.title,
     title: listing.title,
     description: listing.description,
     city: listing.city,

@@ -112,6 +112,8 @@ type ListingFormState = {
   trustScore: string;
   gives: string;
   wants: string;
+  ownerName: string;
+  ownerContact: string;
 };
 
 const initialListingForm: ListingFormState = {
@@ -123,6 +125,8 @@ const initialListingForm: ListingFormState = {
   trustScore: "4.5",
   gives: "",
   wants: "",
+  ownerName: "",
+  ownerContact: "",
 };
 
 export default function LandingPage() {
@@ -288,6 +292,8 @@ export default function LandingPage() {
           trustScore: Number(listingForm.trustScore),
           gives: listingForm.gives,
           wants: parseWantedItems(listingForm.wants),
+          ownerName: listingForm.ownerName,
+          ownerContact: listingForm.ownerContact,
         }),
       });
 
@@ -712,6 +718,36 @@ export default function LandingPage() {
                 </CardHeader>
                 <CardContent className="p-6 pt-0">
                   <form className="space-y-4" onSubmit={handleListingSubmit}>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-slate-700">Your name or handle</span>
+                        <input
+                          required
+                          value={listingForm.ownerName}
+                          onChange={(event) =>
+                            setListingForm((current) => ({ ...current, ownerName: event.target.value }))
+                          }
+                          placeholder="Kenan, or @kenan"
+                          className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-base text-slate-900 focus:border-amber-400 focus:outline-none"
+                        />
+                      </label>
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-slate-700">Contact (email or @handle)</span>
+                        <input
+                          required
+                          value={listingForm.ownerContact}
+                          onChange={(event) =>
+                            setListingForm((current) => ({ ...current, ownerContact: event.target.value }))
+                          }
+                          placeholder="kenan@example.com"
+                          className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-base text-slate-900 focus:border-amber-400 focus:outline-none"
+                        />
+                        <span className="mt-1 block text-xs text-slate-500">
+                          Stays private — used only to coordinate a matched chain, never shown in the public board.
+                        </span>
+                      </label>
+                    </div>
+
                     <div className="grid gap-4 md:grid-cols-2">
                       <label className="block">
                         <span className="mb-2 block text-sm font-semibold text-slate-700">Title</span>

@@ -75,6 +75,8 @@ create table listings (
   trust_score numeric not null,
   gives text not null,
   wants text[] not null,
+  owner_name text,
+  owner_contact text,
   created_at timestamptz not null
 );
 ```
