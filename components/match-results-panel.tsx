@@ -13,7 +13,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { type ChainProposal, type ChainProposalStatus } from "@/lib/chain-proposals";
+import {
+  type ChainProposalStatus,
+  type ChainProposalWithContacts,
+} from "@/lib/chain-proposals";
 import {
   buildChainMetrics,
   buildWhyThisMatch,
@@ -108,7 +111,7 @@ type MatchResultsPanelProps = {
   engineMode: "legacy" | "graph" | "compare";
   matchData: MatchExplorerResponse | null;
   matchError: string;
-  proposalsByChainId?: Record<string, ChainProposal>;
+  proposalsByChainId?: Record<string, ChainProposalWithContacts>;
   onCreateProposal?: (chain: MatchResultChain) => Promise<void>;
   onRespondToProposal?: (
     proposalId: string,
@@ -199,7 +202,7 @@ function ChainCard({
   index: number;
   maxHops: number;
   engineLabel?: string;
-  proposal?: ChainProposal;
+  proposal?: ChainProposalWithContacts;
   onCreateProposal?: (chain: MatchResultChain) => Promise<void>;
   onRespondToProposal?: (
     proposalId: string,
@@ -336,6 +339,35 @@ function ChainCard({
                   </div>
                 );
               })}
+
+              {proposal.status === "accepted" && proposal.contacts ? (
+                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                  <p className="text-sm font-bold uppercase tracking-[0.18em] text-emerald-900">
+                    Chain confirmed — contact your trade partners
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-emerald-800">
+                    Everyone accepted, so contact details are now shared with this chain. Agree on
+                    handover details directly.
+                  </p>
+                  <div className="mt-3 space-y-2">
+                    {proposal.contacts.map((entry) => (
+                      <div
+                        key={entry.listingId}
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-white/80 px-3 py-2"
+                      >
+                        <span className="text-sm font-semibold text-slate-900">{entry.name}</span>
+                        {entry.contact ? (
+                          <span className="font-mono text-sm text-emerald-900">{entry.contact}</span>
+                        ) : (
+                          <span className="text-xs uppercase tracking-[0.18em] text-slate-400">
+                            demo listing — no contact stored
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>

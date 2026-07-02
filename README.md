@@ -79,6 +79,27 @@ create table listings (
   owner_contact text,
   created_at timestamptz not null
 );
+
+create table chain_proposals (
+  id text primary key,
+  chain_id text not null,
+  chain_summary text not null,
+  chain_score numeric not null,
+  participating_listings text[] not null,
+  participants jsonb not null,
+  status text not null,
+  created_at timestamptz not null,
+  updated_at timestamptz not null
+);
+
+create table match_requests (
+  id bigint generated always as identity primary key,
+  have text not null,
+  want text not null,
+  max_hops integer not null,
+  engine text not null,
+  created_at timestamptz not null
+);
 ```
 
 Without Supabase env vars, waitlist entries are stored in `data/waitlist.json` and listings are stored in `data/listings.json`.

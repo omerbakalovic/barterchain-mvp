@@ -65,10 +65,33 @@ create table listings (
   created_at timestamptz not null
 );
 
+create table chain_proposals (
+  id text primary key,
+  chain_id text not null,
+  chain_summary text not null,
+  chain_score numeric not null,
+  participating_listings text[] not null,
+  participants jsonb not null,
+  status text not null,
+  created_at timestamptz not null,
+  updated_at timestamptz not null
+);
+
+create table match_requests (
+  id bigint generated always as identity primary key,
+  have text not null,
+  want text not null,
+  max_hops integer not null,
+  engine text not null,
+  created_at timestamptz not null
+);
+
 -- Allow service-role inserts only (the API uses the service role key,
 -- the anon key is never exposed to clients).
 alter table waitlist_entries enable row level security;
 alter table listings enable row level security;
+alter table chain_proposals enable row level security;
+alter table match_requests enable row level security;
 ```
 
 You should see **Success. No rows returned**.
@@ -134,17 +157,17 @@ To verify it actually saved:
 
 ## What's still not persisted
 
-Even with Supabase set up, two things stay on the local filesystem (so they
-work in `npm run dev` but not on Vercel):
-- **Chain proposals** (`/api/chain-proposals`) — the store has no Supabase
-  branch yet.
+Even with Supabase set up, one thing stays on the local filesystem (so it
+works in `npm run dev` but not on Vercel):
 - **Buffer deposits and releases** — the buffer state is stored as a field on
   the listing JSON, but the listing-store's Supabase write doesn't include it.
 
-For the "let friends try the registration and demo" use case this doesn't
-matter. The hero waitlist works, the listing form works, the chain lab works
-against the demo listings hard-coded in the app. If you later want full
-feature parity on production, those two stores need Supabase support added.
+Waitlist entries, listings, chain proposals, and match-request logs all
+persist to Supabase when the env vars are configured. When a chain proposal
+is accepted by every participant, the API attaches each participant's stored
+contact (from `listings.owner_contact`) to the proposal response so the chain
+can coordinate the handover directly — accepting the chain is the
+participants' consent to be introduced.
 
 ## Troubleshooting
 

@@ -1,5 +1,6 @@
 ﻿import { NextResponse } from "next/server";
 
+import { attachContactsIfAccepted } from "@/lib/chain-contacts";
 import { findChainProposalById, updateChainProposal } from "@/lib/chain-proposal-store";
 import {
   applyChainProposalDecision,
@@ -73,12 +74,14 @@ export async function POST(
     return NextResponse.json({ message: "Proposal not found." }, { status: 404 });
   }
 
+  const proposalWithContacts = await attachContactsIfAccepted(updatedProposal);
+
   return NextResponse.json({
     message:
       updatedProposal.status === "accepted"
-        ? "All participants accepted this proposal."
+        ? "All participants accepted this proposal. Contact details are now shared with the chain."
         : "Participant accepted the proposal.",
-    proposal: updatedProposal,
+    proposal: proposalWithContacts,
   });
 }
 

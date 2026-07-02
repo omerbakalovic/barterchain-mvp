@@ -44,6 +44,21 @@ export type ChainProposalInput = {
   listings: BarterListing[];
 };
 
+export type ChainParticipantContact = {
+  listingId: string;
+  name: string;
+  contact: string | null;
+};
+
+/**
+ * A proposal as returned by the API: once fully accepted, the response is
+ * enriched with participant contacts so the chain can coordinate directly.
+ * The contacts field is response-only and never persisted with the proposal.
+ */
+export type ChainProposalWithContacts = ChainProposal & {
+  contacts?: ChainParticipantContact[];
+};
+
 function normalizeWhitespace(value: string) {
   return value.trim().replace(/\s+/g, " ");
 }

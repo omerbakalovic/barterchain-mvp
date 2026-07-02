@@ -64,6 +64,13 @@ test("chain proposals can be created and fully accepted", async () => {
   assert.equal(created.proposal.status, "pending");
   assert.equal(created.proposal.participants.length, 4);
 
+  let lastAcceptPayload: {
+    proposal: {
+      status: string;
+      contacts?: Array<{ listingId: string; name: string; contact: string | null }>;
+    };
+  } | null = null;
+
   for (const listing of payload.listings) {
     const acceptResponse = await acceptProposal(
       new Request(`http://localhost:3000/api/chain-proposals/${created.proposal.id}/accept`, {
@@ -79,7 +86,15 @@ test("chain proposals can be created and fully accepted", async () => {
     );
 
     assert.equal(acceptResponse.status, 200);
+    lastAcceptPayload = (await acceptResponse.json()) as typeof lastAcceptPayload;
   }
+
+  assert.equal(lastAcceptPayload?.proposal.status, "accepted");
+  assert.equal(
+    lastAcceptPayload?.proposal.contacts?.length,
+    4,
+    "fully accepted proposal should reveal one contact entry per participant"
+  );
 
   const listResponse = await GET();
   const listPayload = (await listResponse.json()) as {

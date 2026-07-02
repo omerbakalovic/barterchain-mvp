@@ -1,14 +1,18 @@
 ﻿import { NextResponse } from "next/server";
 
+import { attachContactsIfAccepted } from "@/lib/chain-contacts";
 import { createStoredChainProposal, readChainProposals } from "@/lib/chain-proposal-store";
 import { validateChainProposalInput } from "@/lib/chain-proposals";
 
 export async function GET() {
   const proposals = await readChainProposals();
+  const proposalsWithContacts = await Promise.all(
+    proposals.map((proposal) => attachContactsIfAccepted(proposal))
+  );
 
   return NextResponse.json({
-    proposals,
-    count: proposals.length,
+    proposals: proposalsWithContacts,
+    count: proposalsWithContacts.length,
   });
 }
 

@@ -18,7 +18,11 @@ import {
 
 import { MatchResultsPanel, type MatchExplorerResponse } from "@/components/match-results-panel";
 import { Button } from "@/components/ui/button";
-import { toChainProposalPayload, type ChainProposal } from "@/lib/chain-proposals";
+import {
+  toChainProposalPayload,
+  type ChainProposal,
+  type ChainProposalWithContacts,
+} from "@/lib/chain-proposals";
 import { readJsonResponse } from "@/lib/read-json-response";
 import { parseWantedItems } from "@/lib/listings";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -99,7 +103,7 @@ type ListingsApiResponse = {
 };
 
 type ChainProposalsApiResponse = {
-  proposals: ChainProposal[];
+  proposals: ChainProposalWithContacts[];
   count: number;
 };
 
@@ -147,7 +151,7 @@ export default function LandingPage() {
   const [matchError, setMatchError] = useState("");
   const [proposalMessage, setProposalMessage] = useState("");
   const [proposalMessageTone, setProposalMessageTone] = useState<"success" | "error">("success");
-  const [chainProposals, setChainProposals] = useState<ChainProposal[]>([]);
+  const [chainProposals, setChainProposals] = useState<ChainProposalWithContacts[]>([]);
   const [proposalActionState, setProposalActionState] = useState<{
     type: "create" | "decision";
     chainId?: string;
@@ -178,7 +182,7 @@ export default function LandingPage() {
     () =>
       Object.fromEntries(chainProposals.map((proposal) => [proposal.chainId, proposal])) as Record<
         string,
-        ChainProposal
+        ChainProposalWithContacts
       >,
     [chainProposals]
   );
@@ -415,7 +419,7 @@ export default function LandingPage() {
       });
       const payload = await readJsonResponse<{
         message?: string;
-        proposal?: ChainProposal;
+        proposal?: ChainProposalWithContacts;
       }>(response);
 
       if (!response.ok || !payload.proposal) {
