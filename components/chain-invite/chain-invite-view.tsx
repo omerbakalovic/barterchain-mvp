@@ -181,7 +181,8 @@ export function ChainInviteView({ initialInvite }: { initialInvite: InviteWithSt
                           <label className="block">
                             <span className="mb-1 block text-xs font-semibold text-slate-600">
                               Kontakt für die anderen (optional, z.&nbsp;B. E-Mail — wird erst
-                              geteilt, wenn alle zugesagt haben)
+                              geteilt, wenn alle zugesagt haben; bei E-Mail bekommst du auch
+                              Updates zu dieser Kette)
                             </span>
                             <input
                               value={contactDraft}

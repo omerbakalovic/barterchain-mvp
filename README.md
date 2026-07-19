@@ -50,7 +50,18 @@ SUPABASE_URL=...
 SUPABASE_SERVICE_ROLE_KEY=...
 MATCH_API_ENGINE=legacy
 ADMIN_SIGNALS_ACCESS_KEY=...
+# optional — email notifications for chain-invite responses (via resend.com)
+RESEND_API_KEY=...
+CHAIN_NOTIFY_EMAIL=operator@example.com
+CHAIN_EMAIL_FROM="BarterChain <onboarding@resend.dev>"
 ```
+
+`RESEND_API_KEY` enables email notifications when someone responds on a
+`/chain/[id]` page: the operator (`CHAIN_NOTIFY_EMAIL`) is notified on every
+response, and participants who accepted with an email-shaped contact are
+notified about later responses — most importantly the "everyone accepted,
+contacts are now visible" moment. Without the key, notifications are a silent
+no-op and everything else works unchanged.
 
 For deploying to Vercel with working waitlist + listing forms, follow the
 step-by-step guide in [`docs/supabase-setup.md`](docs/supabase-setup.md).

@@ -10,6 +10,7 @@ import {
   findChainInviteById,
   updateStoredChainInvite,
 } from "@/lib/chain-invite-store";
+import { sendChainInviteNotifications } from "@/lib/chain-notifications";
 
 function resolveDecision(value: unknown): ChainInviteDecision | null {
   if (value === "accepted" || value === "accept") return "accepted";
@@ -76,6 +77,13 @@ export async function POST(
       { status: 500 }
     );
   }
+
+  await sendChainInviteNotifications({
+    invite: updated,
+    respondedParticipantId: participantId,
+    decision,
+    baseUrl: new URL(request.url).origin,
+  });
 
   const sanitized = sanitizeChainInvite(updated);
   const status = deriveChainInviteStatus(sanitized);
