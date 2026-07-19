@@ -100,6 +100,15 @@ create table match_requests (
   engine text not null,
   created_at timestamptz not null
 );
+
+create table chain_invites (
+  id text primary key,
+  title text not null,
+  note text,
+  participants jsonb not null,
+  created_at timestamptz not null,
+  updated_at timestamptz not null
+);
 ```
 
 Without Supabase env vars, waitlist entries are stored in `data/waitlist.json` and listings are stored in `data/listings.json`.
@@ -126,6 +135,7 @@ npm run test
 - `app/api/chain-proposals/route.ts` stores chain proposals and blocks overlapping active listings.
 - `app/api/waitlist/route.ts` validates and stores waitlist submissions.
 - `app/admin/signals` and `app/admin/buffer` provide read-only operator dashboards (gated by `ADMIN_SIGNALS_ACCESS_KEY` in production).
+- `app/admin/chains` lets the operator turn a manually found chain into a shareable German-language page at `/chain/[id]`, where participants confirm with one click; contacts unlock only when everyone accepted (concierge-brokering tool born from the Kleinanzeigen field test).
 - `lib/listing-store.ts` handles Supabase or local listing persistence.
 - `lib/buffer.ts` defines the buffer state machine, size-class pricing, and fee calculation (see [docs/buffer-model.md](docs/buffer-model.md)).
 - `lib/chain-proposal-store.ts` persists proposal lifecycle state separately from matching.

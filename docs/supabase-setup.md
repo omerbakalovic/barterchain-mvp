@@ -86,12 +86,22 @@ create table match_requests (
   created_at timestamptz not null
 );
 
+create table chain_invites (
+  id text primary key,
+  title text not null,
+  note text,
+  participants jsonb not null,
+  created_at timestamptz not null,
+  updated_at timestamptz not null
+);
+
 -- Allow service-role inserts only (the API uses the service role key,
 -- the anon key is never exposed to clients).
 alter table waitlist_entries enable row level security;
 alter table listings enable row level security;
 alter table chain_proposals enable row level security;
 alter table match_requests enable row level security;
+alter table chain_invites enable row level security;
 ```
 
 You should see **Success. No rows returned**.

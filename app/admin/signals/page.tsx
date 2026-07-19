@@ -294,6 +294,12 @@ export default async function AdminSignalsPage({
             >
               View buffer inventory →
             </Link>
+            <Link
+              href={accessKey ? `/admin/chains?key=${encodeURIComponent(accessKey)}` : "/admin/chains"}
+              className="text-xs font-semibold text-amber-800 hover:text-amber-900"
+            >
+              Chain invites →
+            </Link>
           </div>
         </div>
 
