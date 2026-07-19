@@ -43,3 +43,5 @@ next-env.d.ts
 data/waitlist.json
 data/listings.json
 data/match-requests.json
+data/chain-proposals.json
+data/chain-invites.json
