@@ -411,7 +411,9 @@ function ChainCard({
       </CardHeader>
       <CardContent className="grid gap-4 p-6 pt-0 md:grid-cols-2">
         {chain.listings.map((listing, listingIndex) => {
-          const next = chain.listings[(listingIndex + 1) % chain.listings.length];
+          const recipient = chain.listings[
+            (listingIndex + chain.listings.length - 1) % chain.listings.length
+          ];
 
           return (
             <div key={listing.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -438,7 +440,7 @@ function ChainCard({
                   <span className="font-semibold">{listing.trustScore.toFixed(1)}</span>
                 </p>
                 <p className="rounded-xl bg-white px-3 py-2 text-slate-600">
-                  Passes item to <span className="font-semibold">{next.trader}</span>
+                  Passes item to <span className="font-semibold">{recipient.trader}</span>
                 </p>
               </div>
             </div>

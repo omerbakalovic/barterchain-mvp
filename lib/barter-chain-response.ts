@@ -22,16 +22,16 @@ export function normalizeBarterItem(value: string) {
 export function buildBarterChainSummary(chain: BarterListing[]) {
   return chain
     .map((listing, index) => {
-      const next = chain[(index + 1) % chain.length];
-      return `${getListingLabel(listing)} gives ${listing.gives} to ${getListingLabel(next)}`;
+      // Matcher paths follow wants: each listing receives from the next and gives to the previous.
+      const recipient = chain[(index + chain.length - 1) % chain.length];
+      return `${getListingLabel(listing)} gives ${listing.gives} to ${getListingLabel(recipient)}`;
     })
     .join(" -> ");
 }
 
 export function scoreBarterChain(chain: BarterListing[], desiredReturnItem?: string) {
   const start = chain[0];
-  const last = chain[chain.length - 1];
-  const returnItem = last.gives;
+  const returnItem = chain[1].gives;
   const normalizedDesiredItem = desiredReturnItem
     ? normalizeBarterItem(desiredReturnItem)
     : null;

@@ -5,6 +5,7 @@ import path from "node:path";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 
 import { GET } from "@/app/api/match/route";
+import { type BarterChain } from "@/lib/barter-chain-response";
 
 const originalDataDir = process.env.BARTERCHAIN_DATA_DIR;
 const originalSupabaseUrl = process.env.SUPABASE_URL;
@@ -30,6 +31,43 @@ afterEach(async () => {
 
   await Promise.all(tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })));
 });
+
+for (const engine of ["legacy", "graph", "compare"] as const) {
+  test(`api match ${engine} preserves real transfer direction for stored listings`, async () => {
+    const listings = [
+      { id: "direction-a", title: "Alice", gives: "bike", wants: ["drill"] },
+      { id: "direction-b", title: "Bob", gives: "drill", wants: ["monitor"] },
+      { id: "direction-c", title: "Cara", gives: "monitor", wants: ["bike"] },
+    ].map((entry) => ({
+      ...entry, description: "Direction regression fixture", ownerName: entry.title,
+      ownerContact: "@test", category: "Other", city: "Berlin", valueEstimate: 100,
+      trustScore: 4, createdAt: "2026-09-18T12:00:00.000Z", source: "local",
+    }));
+    await useTempDataDir(JSON.stringify(listings));
+
+    const response = await GET(new Request(
+      `http://localhost:3000/api/match?have=bike&want=drill&maxHops=3&engine=${engine}`
+    ));
+    assert.equal(response.status, 200);
+    const payload = await response.json() as {
+      chains: BarterChain[];
+      comparison: Record<"legacy" | "graph", {
+        candidateChains: BarterChain[]; selectedChains: BarterChain[];
+      }>;
+    };
+    const groups = engine === "compare"
+      ? [payload.comparison.legacy, payload.comparison.graph]
+          .flatMap((result) => [result.candidateChains, result.selectedChains])
+      : [payload.chains];
+    for (const chains of groups) {
+      assert.equal(chains.length, 1);
+      assert.equal(chains[0].returnItem, "drill");
+      assert.ok(chains[0].reasons.includes("exact return item match"));
+      assert.equal(chains[0].summary,
+        "Alice gives bike to Cara -> Bob gives drill to Alice -> Cara gives monitor to Bob");
+    }
+  });
+}
 
 test("api match can use the graph engine behind a request flag", async () => {
   await useTempDataDir();
