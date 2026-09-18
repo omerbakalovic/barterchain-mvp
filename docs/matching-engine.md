@@ -52,6 +52,22 @@ There is a directed edge `A -> B` when:
 
 Adjacency is sorted by listing id so traversal order is deterministic.
 
+### Transfer direction and response compatibility
+
+An edge `A -> B` means A **receives** B's offered item. Matcher paths and
+the response `listings` array preserve that wants-based order. Each participant
+gives to the previous listing (wrapping around the cycle) and receives from
+the next. For `[A, B, C]`, the physical transfers are A to C, B to A, and C to B.
+The starter's `returnItem` is therefore `listings[1].gives`.
+
+Summaries, participant cards, desired-return scoring, and marketplace comparison
+use this convention. The correction preserves listing order, chain IDs, and
+API fields; rankings may change because the desired-item bonus now reflects
+the item actually received. Already stored proposals are historical snapshots:
+their saved summaries and scores are not rewritten. Recompute and review an
+old proposal before reusing it. Manually ordered chain invites are a separate
+flow and do not use the matcher path convention.
+
 ## Cycle Detection
 Cycle detection currently uses deterministic DFS with canonicalization rules:
 

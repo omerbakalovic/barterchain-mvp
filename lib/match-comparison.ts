@@ -375,7 +375,7 @@ function projectScoredCycleToChain(cycle: ScoredCycle, listingMap: Map<string, B
     hopCount: listings.length,
     score: cycle.score,
     summary: buildBarterChainSummary(listings),
-    returnItem: listings[listings.length - 1]?.gives ?? "",
+    returnItem: listings[1]?.gives ?? "",
     reasons: cycle.reasons,
   };
 }
